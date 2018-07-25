@@ -1,0 +1,53 @@
+<html>
+<head>
+	<title>My Application</title>
+<script src='jquery.min.js'></script>
+<script src='bootstrap/js/bootstrap.js' type="text/javascript"></script>
+  <!-- Bootstrap core CSS -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="styles.css" rel="stylesheet">
+
+<script type="text/javascript">
+
+function onLoad(){
+}
+
+function makeRequest(){
+	window.location = "/makerequest";
+}
+
+$(window).load(onLoad);
+
+</script>
+	
+	
+</head>
+<body>
+<h1>BlueJeans OAuth</h1>
+<p id="intro">This application demonstrates the flow involved with a BlueJeans 3-Legged 
+OAuth process.</p>
+<div>
+<ol>
+<li>Clicking on the Request button below will send the browser to the <b>/makerequest</b> page.
+  <ul>
+    <li>This page causes the browser to redirect to the <b>BlueJeans.com <i>authorization</i></b> page.
+	</li>
+	<li>There you will be asked to login, and then approve this application (test.3leg) request to access
+  your meetings</li>
+  </ul>
+</li>
+<li>The application sets your return from BlueJeans authorization to the <b>/callback</b> page.
+  <ul>
+    <li>If you declined access, this page will display a 401 error, along with an error message.
+	</li>
+	<li>If you accepted then the callback will include an authorization code.  This code is used in a BlueJeans 
+	OAuth API call to generate your access token.
+	</li>
+  </ul>
+  </li>
+</ol>
+<div>
+	<span>Request BlueJeans Authorization&nbsp;<button onclick="makeRequest()">Request</button></span>
+</div>
+</body>	
+</html>
