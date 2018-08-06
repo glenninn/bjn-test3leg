@@ -13,7 +13,7 @@ This reference design creates a simple web site that supports the 3-Legged OAuth
 
 
 
-## Setup
+## Download and Install
 
 To use the Test3Leg, you will need to have the Node JS environment including the package manager too, **npm**.
 
@@ -21,6 +21,10 @@ To use the Test3Leg, you will need to have the Node JS environment including the
 - Download the contents of this github to your computer.  Then run the initialization  `npm install` to have npm download and install the npm modules
 
 
+
+## Prerequisites
+
+In order to run this reference application, you will need to do these steps to setup the environment.
 
 ### Register/Create Test Application's OAuth Information
 
@@ -58,11 +62,11 @@ The results of the API call will be the registration information, including an O
 
 ### Configure Test Application's appinfo.json
 
-Ensure that you have created an`appinfo.json` configuration file.  (The project includes a template example of the file in `appinfo.example.json`)   The file needs to include the `client_secret` key.  If you have forgotten the key, you must regenerate one and put that value into the appinfo.json file.
+Ensure that you have created an`appinfo.json` configuration file that is in the same locatoin as the source javascript file, `index.js`.  (The project includes a template example of the file in `appinfo.example.json`)   The file needs to include the `client_secret` key.  If you have forgotten the key, you must regenerate one and put that value into the appinfo.json file.
 
 ```javascript
 {   
-  "appLogoUrl": "https://glenninn.github.io/bjn-test3leg/html/Logo-84-84.png",
+  "appLogoUrl": "https://glenninn.github.io/bjn-test3leg/html/Logo-84x84.png",
   "redirectUrls": [
       "https://glenninn.com/callback",
 	  "https://glenninn.com/authenticated"
@@ -73,13 +77,13 @@ Ensure that you have created an`appinfo.json` configuration file.  (The project 
 }
 ```
 
+
+
 ### Create Local Alias for glenninn.com
 
-Edit your operating system host file to create a local alias that maps:
+Edit your operating system host file to create a local alias that maps `glenninn.com --> localhost`  This is necessary because BlueJeans does not allow `localhost`as part of the Application's redirectUrl's.
 
-` glenninn.com --> localhost`
 
- 
 
 ## Running The Application
 Launch the node web server by typing
@@ -100,7 +104,7 @@ Loaded App Configuration
     "https://glenninn.com/authenticated"
   ],
   "appName": "test.3leg",
-  "client_id": "43160b22923645618ef2c3ef00989bec",
+  "client_id": "43160b229 ... 18ef2c3ef00989bec",
   "client_secret": "..."
 }
 ```
@@ -134,12 +138,12 @@ Accessing the /makerequest page causes the following to happen:
 
 - the *Test Application* **server** constructs the BlueJeans API `https://bluejeans.com/oauth2/authorize`  <u>Note</u> the URL for this API goes directly to bluejeans.com, and **not** api.bluejeans.com
 - The API parameters are passed as query parameters
-- The server send the user browser a redirect command to send the user to BlueJeans for authorizing the application with access his or her BlueJeans' account.
+- The server sends the user's browser a redirect command to send the user to BlueJeans for authorizing the application with access his or her BlueJeans' account.
 
 | Query Parameter | Authorize Function Description                               |
 | --------------- | ------------------------------------------------------------ |
 | clientId        | This is the client_id key that was created for the *Test Application* by the BlueJeans Administrator |
-| redirectUri     | One of the registered URL's associated with *Test Application*.  Alternatively, it can be a page from a domain registered for *Test Application* |
+| redirectUri     | One of the registered URL's associated with *Test Application*.  Alternatively, it can be a page from a domain registered in *Test Application*'s redirectUrls field. |
 | state           | This is an application-specific value that is used to help prevent phishing |
 | scope           | This parameter is a comma-separated list of functions that BlueJeans will allow the Test Application to perform.  Typically this list is  "list_meetings,modify_meetings,user_info" |
 | responseType    | The responseType tells BlueJeans how to return a "success value" if the user successfully authorizes access.  Typically this is set to "code" |
@@ -148,7 +152,7 @@ Accessing the /makerequest page causes the following to happen:
 
 
 
-The user should now see a BLueJeans page that looks like this:
+The user should now see a BlueJeans page that looks like this:
 
 ![](./images/bjnauthorize.png)
 
@@ -168,7 +172,7 @@ The *Test Application*'s <u>/callback</u> page receives the result of the Author
 
 #### Authorization Succeeds
 
-*Test Application* takes the authorization <u>code</u> returned from BlueJeans and then calls the API`/oauth2/token?Code` to exchange that code for an access_token.  The results of that exchange (which should be the access token JSON object) are returned to the user's web session:
+*Test Application* takes the authorization <u>code</u> returned from BlueJeans and the **server** makes a call to the API`/oauth2/token?Code` to exchange that code for an access_token.  The results of that exchange (which should be the access token JSON object) are returned to the user's web session:
 
 ![](./images/bjnauthenticated.png)
 
@@ -176,9 +180,9 @@ The *Test Application*'s <u>/callback</u> page receives the result of the Author
 
 #### Authorization Fails
 
-Upon failure of authorization,  *Test Application* returns to the user's web session the error information in a JSON error object.
+Upon failure of authorization,  *Test Application* **server** returns to the user's web session the error information in a JSON error object.
 
 ![](./images/bjnnoaccess.png)
-```
 
-```
+
+
