@@ -68,6 +68,7 @@ app.use("/",router);
 
 var appInfoFile = "appinfo.json";
 var appInfo = {};
+var antiPhishing = "fishing";
 
 
 
@@ -91,7 +92,7 @@ router.route("/makerequest")
 	  }
 	  addQp("clientId",    appInfo.client_id);
 	  addQp("redirectUri", appInfo.redirectUrls[0] ); // +"/callback" );
-	  addQp("state",       "fishing");
+	  addQp("state",       antiPhishing);
 	  addQp("scope",       "list_meetings,modify_meetings,user_info" );
 	  addQp("responseType", "code");
 	  addQp("appName",     appInfo.appName );
@@ -125,8 +126,17 @@ router.route("/callback")
 	  console.log( JSON.stringify(req.query,null,2));
 	  
 	  // Handle when user declines authorization
-	  if(req.query.error && (req.query.error = "401")) {
+	  if(req.query.error && (req.query.error == "401")) {
 		  res.status(401).send(req.query);
+		  return;
+	  }
+	  
+	  // check anti-phishing toolbar
+	  if(req.query.state != antiPhishing) {
+		  var uhoh = {
+			  message : "Phishing error, change your bait"
+		  };
+		  res.status(401).send(uhoh);
 		  return;
 	  }
 	  

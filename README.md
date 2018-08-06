@@ -1,5 +1,5 @@
 
-# Test3Leg - a NodeJS App Demonstrating the 3-Legged OAuth Process
+# Test3Leg - a NodeJS App Demonstrating the BlueJeans 3-Legged OAuth Process
 
 - 8/6/2018, g1, Fill out READ.me with more comprehensive step-by-step description of process flow.
 - 7/24/2018, g1, Initial Check-in
@@ -58,7 +58,7 @@ The results of the API call will be the registration information, including an O
 
 ### Configure Test Application's appinfo.json
 
-Ensure that you have created an`appinfo.json` configuration file.  (The project includes a template example of the file in `appinfo.example.json`)   Make sure that you have the `client_secret`key.  If you have forgotten the key, you must regenerate one and put that value into the appinfo.json file.
+Ensure that you have created an`appinfo.json` configuration file.  (The project includes a template example of the file in `appinfo.example.json`)   The file needs to include the `client_secret` key.  If you have forgotten the key, you must regenerate one and put that value into the appinfo.json file.
 
 ```javascript
 {   
@@ -114,8 +114,7 @@ To simulate how a *Test Application* user would grant access to BlueJeans, start
 
 - Open your browser and then browse to:
 
-
-  `http://glenninn.com
+` http://glenninn.com
 
 At this point you should see the following screen:
 
@@ -129,9 +128,9 @@ To start an Oauth 3-Legged session, click on the **Request** button.
 
 ## Application Requesting Client Access to BlueJeans
 
-Clicking the **Request** button connects the user's browser to the /makerequest page on the *Test Application* server.
+Clicking the **Request** button connects the user's browser to the /makerequest page on the *Test Application* **server**.
 
-Accessing the /makerequest  causes the following to happen:
+Accessing the /makerequest page causes the following to happen:
 
 - the *Test Application* **server** constructs the BlueJeans API `https://bluejeans.com/oauth2/authorize`  <u>Note</u> the URL for this API goes directly to bluejeans.com, and **not** api.bluejeans.com
 - The API parameters are passed as query parameters
@@ -143,7 +142,7 @@ Accessing the /makerequest  causes the following to happen:
 | redirectUri     | One of the registered URL's associated with *Test Application*.  Alternatively, it can be a page from a domain registered for *Test Application* |
 | state           | This is an application-specific value that is used to help prevent phishing |
 | scope           | This parameter is a comma-separated list of functions that BlueJeans will allow the Test Application to perform.  Typically this list is  "list_meetings,modify_meetings,user_info" |
-| responseType    | The responseType tells BlueJeans how to return a "success token" if the user successfully authorizes access.  Typically this is set to "code" |
+| responseType    | The responseType tells BlueJeans how to return a "success value" if the user successfully authorizes access.  Typically this is set to "code" |
 | appName         | The App Name is the name of the application registered with BlueJeans. |
 | appLogoUrl      | The App Logo URL directs what image should be used on the BlueJeans authorization page to show "co-branding" of *Test Application* and BlueJeans |
 
@@ -155,7 +154,7 @@ The user should now see a BLueJeans page that looks like this:
 
 
 
-The use simply enters his or her BlueJEans user ID and clicks on **Next Step** 
+The user simply enters his or her BlueJeans user ID and clicks on **Next Step** 
 
 ![](./images/bjnpassword.png)
 
