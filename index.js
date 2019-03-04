@@ -7,6 +7,9 @@ var auth    = require("./auth.js");
 var app     = express();
 var router  = express.Router();
 
+// program configuration
+var verbose = false;   // show verbose console log msgs;
+
 // Set port apropos for Heroku
 var ourPort = process.env.PORT || 80;
 var secPort = process.env.PORT ||443;
@@ -100,6 +103,13 @@ router.route("/makerequest")
 	  
 	  url += qp;
 	  
+	  console.log("\n===> Starting 3-Leg cycle in response to client request");
+	  if(verbose){
+		  console.log("redirection URL= " + url);
+	  } else {
+		  console.log("client_id:   " + appInfo.client_id);
+		  console.log("redirectURi: " + appInfo.redirectUrls[0]);
+	  }
 	  // Redirect the client's browser to this BlueJeans authorization API
 	  res.redirect(url);
   });
@@ -122,7 +132,7 @@ var oAuthApi= "/oauth2/token?Code";
 */ 
 router.route("/callback")
   .get( (req,res)=>{
-	  console.log("OAuth Authorization Returned:");
+	  console.log("\n<--- BlueJeans Authorization returned");
 	  console.log( JSON.stringify(req.query,null,2));
 	  
 	  // Handle when user declines authorization
@@ -148,14 +158,25 @@ router.route("/callback")
             client_id     : appInfo.client_id
 	  };
 	  
-	  console.log("ORec = " + JSON.stringify(orec,null,2));
-	  
+	  if(verbose){
+		  console.log("\n===> Exchanging Authorization Code for a User Access Token");
+		  console.log("ORec = " + JSON.stringify(orec,null,2));
+	  } else {
+		  console.log("\n===> Exchanging Authorization Code( " + orec.code + " ) for User Access Token");
+	  }
+  
 	  auth.post(apiHost,oAuthApi,orec).then( (results)=> {
-		  console.log("Success!  BlueJeans OAuth Token Info:");
-		  console.log(JSON.stringify( results,null,2 ));
+		  console.log("<--- Success!  BlueJeans User Access Token Info:");
+		  if(verbose) {
+			console.log(JSON.stringify( results,null,2 ));
+		  } else {
+			console.log("access_token: " + results.access_token);
+			console.log("expires in:   " + results.expires_in);
+			console.log("scope.user:   " + results.scope.user);			
+		  }
 		  res.status(200).json(results)
 	  },(error)=> {
-		  console.log("ERROR:  " );
+		  console.log("<-- ERROR: Failed to receive User Access Token " );
 		  console.log(error);
 		  res.status(401).send(error);
 	  });
